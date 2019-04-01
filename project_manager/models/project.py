@@ -38,6 +38,7 @@ class Task(models.Model):
         Project,
         related_name='tasks',
         on_delete=models.CASCADE,
+        default=None,
     )
 
 

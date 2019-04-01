@@ -1,5 +1,5 @@
 from django.db.models import Q
-from .models import Project, Task, TimeLog
+from .models import Project, Task, TimeLog, Student, User
 from django.shortcuts import render
 from django.urls import reverse
 from django.http import (
@@ -95,3 +95,21 @@ def to_done(request, task_id):
         log.save()
     project = task.project
     return render(request, 'project_manager/project_page.html', {'project': project})
+
+
+# modifications only to test frontend
+@require_authorized
+def modify_project_view(request, id):
+    user = User.objects.get(pk=request.user.id)
+    students = Student.objects.all()
+
+    project = Project.objects.get(pk=id)
+    participants = project.students.all()
+
+    non_participants = Student.objects.exclude(projects=project)
+    if project.students.filter(pk=user.id).exists() or project.instructor.id == user.id:
+        return render(request, 'project_manager/modify_project.html', {
+            'project': project,
+            'participants': participants,
+            'non_participants': non_participants
+        })

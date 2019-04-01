@@ -1,0 +1,38 @@
+{% extends 'yatracker/base.html' %}
+{% block title %}
+    Project modification
+{% endblock %}
+
+{% block content %}
+    <div class="col-md-4" id="modify">
+        <section id="inner_wrapper" class="login">
+            <form method="post">
+                <div class="input-group">
+                    <label for="project_name"> Name </label>
+                    <input type="text" id="project_name" value={{ project.name }}>
+                </div>
+                <div class="input-group">
+                    <label for="project_description"> Description </label>
+                    <input type="text" id="project_description" value={{ project.description }}>
+                </div>
+                <div class="input-group">
+{#                    {% for participant in project.students.objects %}#}
+                    {% for participant in participants %}
+                        <input type="checkbox" class="form-control" id="id_{{ participant.id }}" name="to_leave"
+                               value="id" checked>
+                        <label> {{ participant.name }} {{ participant.surname }}</label>
+                    {% endfor %}
+                </div>
+
+                <div class="input-group">
+                    {% for participant in non_participants %}
+                        <input type="checkbox" class="form-control" id="id_{{ participant.id }}" name="to_leave"
+                               value="id" >
+                        <label> {{ participant.name }} {{ participant.surname }}</label>
+                    {% endfor %}
+                </div>
+
+            </form>
+        </section>
+    </div>
+{% endblock %}

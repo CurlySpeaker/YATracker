@@ -2,20 +2,25 @@
 {% block content %}
     <h1>{{ project.title }}<span class="badge badge-secondary">Project</span></h1>
     <p class="card-text">{{ project.description }}</p>
-    <button type="button" class="btn btn-info">Edit</button>
-    <div class="card" style="width: 18rem;">
+
+        <a href="{% url 'modify_project' project.id %}">
+            <button class="btn btn-info">Edit</button>
+        </a>
+
+    <div class="card float-right" style="width: 18rem;">
         <div class="card-header">
             Project members
         </div>
         <ul class="list-group list-group-flush">
             {% for student in project.students.all %}
-                <a href="#" class="btn btn-link" role="button" aria-pressed="true">{{ student.name}} {{student.surname }}</a>
+                <a href="#" class="btn btn-link" role="button"
+                   aria-pressed="true">{{ student.name }} {{ student.surname }}</a>
             {% endfor %}
         </ul>
     </div>
     <div>
         {% for task in project.tasks.all %}
-            {%  include 'project_manager/task_card_template.html' %}
+            {% include 'project_manager/task_card_template.html' %}
         {% endfor %}
     </div>
 {% endblock %}
