@@ -101,11 +101,9 @@ def to_done(request, id):
     return render(request, 'project_manager/project_page.html', {'project': project})
 
 
-# modifications only to test frontend (modify_project)
 @require_authorized
 def modify_project_view(request, id):
     user = User.objects.get(pk=request.user.id)
-    students = Student.objects.all()
 
     project = Project.objects.get(pk=id)
     participants = project.students.all()
