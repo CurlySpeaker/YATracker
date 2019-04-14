@@ -2,7 +2,7 @@
 {% extends 'yatracker/base.html' %}
 {% block content %}
     <div class="container">
-    <br>
+        <br>
         <div class="shadow p-3 mb-5 bg-white rounded">
             <h1>{{ project.title }}
                 <a href="{% url 'modify_project' project.id %}" class="btn btn-success btn-green">Edit</a>
@@ -10,7 +10,6 @@
             <p class="card-text">{{ project.description }}</p>
         </div>
     </div>
-    {#    <br>#}
 
     <div class="container" style="text-align: center;">
         {#        <div class="shadow p-3 mb-5 bg-white rounded">#}
@@ -87,17 +86,17 @@
                     <br>
                     <div class="shadow bg-white rounded">
                         {#            known info about the project#}
-                        <div class="card">
-                            <div class="card-img-top"></div>
-                            <div class="card-header">
+                        <div class="card" style="padding: 10%">
+                            <div class="container" style="background-color: #e9ecef">
                                 Project instructor:
                             </div>
+                            
                             <ul class="list-group list-group-flush">
                                 <a href="#" class="btn btn-sm btn-light btn-white" role="button"
                                    aria-pressed="true">{{ project.instructor.name }} {{ project.instructor.surname }}</a>
                             </ul>
 
-                            <div class="card-header">
+                            <div class="container" style="background-color: #e9ecef">
                                 Project members:
                             </div>
                             <ul class="list-group list-group-flush">
@@ -109,6 +108,7 @@
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
