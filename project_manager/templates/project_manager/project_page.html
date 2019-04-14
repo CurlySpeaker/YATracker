@@ -2,8 +2,8 @@
 <link rel="stylesheet" href="../../../yatracker/static/css/project_manager.css">
 {% block content %}
     <div class="container">
-        <h1>{{ project.title }} &nbsp <span class="badge badge-secondary">Project</span>
-            <a href="{% url 'modify_project' project.id %}" class="btn btn-primary">Edit</a>
+        <h1>{{ project.title }}
+            <a href="{% url 'modify_project' project.id %}" class="btn btn-success btn-green">Edit</a>
         </h1>
         <p class="card-text">{{ project.description }}</p>
     </div>
@@ -25,10 +25,7 @@
             <div class="col-sm">
                 {% for task in project.tasks.all %}
                     {% if task.status == 'todo' %}
-                        <span>
-                            {% include 'project_manager/task_card_template.html' %}
-                        </span>
-                        <br>
+                        <span> {% include 'project_manager/task_card_template.html' %} </span> <br>
                     {% endif %}
                 {% endfor %}
             </div>
@@ -36,10 +33,7 @@
             <div class="col-sm">
                 {% for task in project.tasks.all %}
                     {% if task.status == 'prog' %}
-                        <span>
-                            {% include 'project_manager/task_card_template.html' %}
-                        </span>
-                        <br>
+                        <span> {% include 'project_manager/task_card_template.html' %} </span> <br>
                     {% endif %}
                 {% endfor %}
             </div>
@@ -47,10 +41,7 @@
             <div class="col-sm">
                 {% for task in project.tasks.all %}
                     {% if task.status == 'done' %}
-                        <span>
-                            {% include 'project_manager/task_card_template.html' %}
-                        </span>
-                        <br>
+                        <span> {% include 'project_manager/task_card_template.html' %} </span> <br>
                     {% endif %}
                 {% endfor %}
             </div>
@@ -70,7 +61,6 @@
                                     <input type="text" class="form-control" id="inlineFormInputGroup"
                                            placeholder="Task title here">
                                 </div></span>
-
                             {#                            Add description#}
                             <span>
                                 <div class="input-group">
@@ -80,16 +70,9 @@
                                     <textarea class="form-control" aria-label="With textarea"
                                               placeholder="Your description here"></textarea>
                                 </div>
-                            </span>
-
+                            </span> <br>
                             {#                            button Add#}
-                            <br>
-                            <span>
-                                <a href="#" class="btn btn-sm btn-primary btn-violet"
-                                        {#                                   style="background-color: #9c27b0; border-color: #9c27b0;"#}
-                                > Add</a>
-                            </span>
-                            <br>
+                            <span> <a href="#" class="btn btn-sm btn-success btn-green"> Add</a> </span><br>
 
                         </div>
                     </div>
@@ -117,11 +100,6 @@
                     </ul>
                 </div>
             </div>
-
         </div>
-
-
     </div>
-    {#    </div>#}
-
 {% endblock %}

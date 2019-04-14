@@ -23,103 +23,29 @@ a:hover {
     border-radius: 50%;
 }
 
-.bd-placeholder-img {
-    background-color: plum;
+
+.btn-green {
+    background-color: #88b77b;
+    border-color: #88b77b;
+}
+
+.btn-grey {
+    background-color: #f1f1f1;
+    border-color: #ff6600;
 }
 
 .card-img-top {
-
+    border-color: #ff6600;
+    text-align: center;
 }
-
-.btn-green {
-    background-color: #48a44c;
-    border-color: #48a44c;
-}
-
-.btn-violet {
-    /*color: #fff;*/
-    background-color: #9c27b0;
-    border-color: #9c27b0;
-}
-
-.btn-orange {
-    /*color: #fff;*/
-    background-color: #fc9208;
-    border-color: #fc9208;
-}
-
-/*.card {*/
-/*border: 10px #fc9208;*/
-/*box-shadow: #333333;*/
-/*}*/
 
 .card-body {
     background-color: #f1f1f1;
     text-align: center;
+    border-color: #ff6600;
 }
 
-/*////////////////////////*/
-.btn-primary {
-    color: #fff;
-    background-color: #9c27b0;
-    border-color: #9c27b0;
-}
-
-.btn-primary:focus,
-.btn-primary.focus {
-    color: #fff;
-    background-color: #9c27b0;
-    border-color: #6b227f;
-}
-
-.btn-primary:hover {
-    color: #fff;
-    background-color: #9c27b0;
-    border-color: #6b227f;
-}
-
-.btn-primary:active,
-.btn-primary.active,
-.open > .dropdown-toggle.btn-primary {
-    color: #fff;
-    background-color: #9c27b0;
-    border-color: #6b227f;
-}
-
-.btn-primary:active:hover,
-.btn-primary.active:hover,
-.open > .dropdown-toggle.btn-primary:hover,
-.btn-primary:active:focus,
-.btn-primary.active:focus,
-.open > .dropdown-toggle.btn-primary:focus,
-.btn-primary:active.focus,
-.btn-primary.active.focus,
-.open > .dropdown-toggle.btn-primary.focus {
-    color: #fff;
-    background-color: #9c27b0;
-    border-color: #6b227f;
-}
-
-.btn-primary:active,
-.btn-primary.active,
-.open > .dropdown-toggle.btn-primary {
-    background-image: none;
-}
-
-.btn-primary.disabled:hover,
-.btn-primary[disabled]:hover,
-fieldset[disabled] .btn-primary:hover,
-.btn-primary.disabled:focus,
-.btn-primary[disabled]:focus,
-fieldset[disabled] .btn-primary:focus,
-.btn-primary.disabled.focus,
-.btn-primary[disabled].focus,
-fieldset[disabled] .btn-primary.focus {
-    background-color: #9c27b0;
-    border-color: #6b227f;
-}
-
-.btn-primary .badge {
-    color: #9c27b0;
-    background-color: #fff;
+.caption-orange {
+    color: #ff6600;
+    text-align: center;
 }
