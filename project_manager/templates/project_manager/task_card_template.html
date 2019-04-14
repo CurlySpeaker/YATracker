@@ -1,30 +1,32 @@
 <link rel="stylesheet" href="../../static/css/project_manager.css">
 <div class="container">
+    <div class="shadow bg-white rounded">
+        <div class="card">
 
-    <div class="card">
-        <div class="card-img-top"></div>
-        <div class="card-body">
-            <div class="card-title">{{ task.title }}</div>
-        </div>
-    </div>
+            <div class="card-img-top"></div>
+            <div class="card-body" style="background-color: #e9ecef;">
+                <div class="card-title">{{ task.title }}</div>
+            </div>
 
-    <div class="card-body">
-        <div class="card-text">{{ task.description }}</div>
-
-        <div class="d-flex justify-content-between align-items-center">
-            {% if task.status == "todo" %}
-                <a href="{{ task.get_started_url }}" class="btn btn-sm btn-success btn-green">Start</a>
-            {% elif task.status == "prog" %}
-                <a href="{{ task.get_paused_url }}" class="btn btn-sm btn-success btn-green">Pause</a>
-                &nbsp;
-                <a href="{{ task.get_done_url }}" class="btn btn-sm btn-light btn-grey">Finish</a>
-            {% elif task.status == "paus" %}
-                <a href="{{ task.get_started_url }}" class="btn btn-sm btn-success btn-green">Start</a>
-                &nbsp;
-                <a href="{{ task.get_done_url }}" class="btn btn-sm btn-light btn-grey">Finish</a>
-            {% else %}
-                <button type="button" class="btn btn-sm btn-grey" disabled>Done</button>
-            {% endif %}
+            <div class="card-body">
+                <div class="card-text">{{ task.description }}</div>
+                <br>
+                <div class="d-flex justify-content-between align-items-center">
+                    {% if task.status == "todo" %}
+                        <a href="{{ task.get_started_url }}" class="btn btn-sm btn-success btn-green">Start</a>
+                    {% elif task.status == "prog" %}
+                        <a href="{{ task.get_paused_url }}" class="btn btn-sm btn-success btn-green">Pause</a>
+                        &nbsp;
+                        <a href="{{ task.get_done_url }}" class="btn btn-sm btn-violet">Finish</a>
+                    {% elif task.status == "paus" %}
+                        <a href="{{ task.get_started_url }}" class="btn btn-sm btn-success btn-green">Start</a>
+                        &nbsp;
+                        <a href="{{ task.get_done_url }}" class="btn btn-sm btn-light btn-violet">Finish</a>
+                    {% else %}
+                        <button type="button" class="btn btn-sm btn-violet" disabled>Done</button>
+                    {% endif %}
+                </div>
+            </div>
         </div>
     </div>
 </div>

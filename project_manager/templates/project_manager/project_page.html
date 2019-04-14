@@ -2,14 +2,19 @@
 {% extends 'yatracker/base.html' %}
 {% block content %}
     <div class="container">
-        <h1>{{ project.title }}
-            <a href="{% url 'modify_project' project.id %}" class="btn btn-success btn-green">Edit</a>
-        </h1>
-        <p class="card-text">{{ project.description }}</p>
-    </div><br>
+    <br>
+        <div class="shadow p-3 mb-5 bg-white rounded">
+            <h1>{{ project.title }}
+                <a href="{% url 'modify_project' project.id %}" class="btn btn-success btn-green">Edit</a>
+            </h1>
+            <p class="card-text">{{ project.description }}</p>
+        </div>
+    </div>
+    {#    <br>#}
 
     <div class="container" style="text-align: center;">
-        <br>
+        {#        <div class="shadow p-3 mb-5 bg-white rounded">#}
+        {#            <br>#}
         <div class="row">
             <div class="col-sm"><b>Todo:</b></div>
             <div class="col-sm"><b>In progress:</b></div>
@@ -17,42 +22,45 @@
             <div class="col-sm"><b>Add a new task:</b></div>
         </div>
         <br>
+        {#        </div>#}
     </div>
 
     <div class="container">
-        <div class="row">
-            <div class="col-sm">
-                {% for task in project.tasks.all %}
-                    {% if task.status == 'todo' %}
-                        <span> {% include 'project_manager/task_card_template.html' %} </span> <br>
-                    {% endif %}
-                {% endfor %}
-            </div>
-            <br>
-            <div class="col-sm">
-                {% for task in project.tasks.all %}
-                    {% if task.status == 'prog' %}
-                        <span> {% include 'project_manager/task_card_template.html' %} </span> <br>
-                    {% endif %}
-                {% endfor %}
-            </div>
-            <br>
-            <div class="col-sm">
-                {% for task in project.tasks.all %}
-                    {% if task.status == 'done' %}
-                        <span> {% include 'project_manager/task_card_template.html' %} </span> <br>
-                    {% endif %}
-                {% endfor %}
-            </div>
-            <br>
+        <div class="shadow p-3 mb-5 bg-white rounded">
+            <div class="row">
+                <div class="col-sm">
+                    {% for task in project.tasks.all %}
+                        {% if task.status == 'todo' %}
+                            <span> {% include 'project_manager/task_card_template.html' %} </span> <br>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <br>
+                <div class="col-sm">
+                    {% for task in project.tasks.all %}
+                        {% if task.status == 'prog' %}
+                            <span> {% include 'project_manager/task_card_template.html' %} </span> <br>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <br>
+                <div class="col-sm">
+                    {% for task in project.tasks.all %}
+                        {% if task.status == 'done' %}
+                            <span> {% include 'project_manager/task_card_template.html' %} </span> <br>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <br>
 
-            <div class="col-sm">
-                <div class="card">
-                    <div class="card-img-top"></div>
-                    <div class="card-body">
-                        <div class="card-title">
-                            {#                            Add a new task title#}
-                            <span> <label class="sr-only" for="inlineFormInputGroup">Title</label>
+                <div class="col-sm">
+                    <div class="card">
+                        <div class="card-img-top"></div>
+                        <div class="shadow bg-white rounded">
+                            <div class="card-body">
+                                <div class="card-title">
+                                    {#                            Add a new task title#}
+                                    <span> <label class="sr-only" for="inlineFormInputGroup">Title</label>
                                 <div class="input-group mb-2">
                                     <div class="input-group-prepend">
                                         <div class="input-group-text">Title</div>
@@ -60,8 +68,8 @@
                                     <input type="text" class="form-control" id="inlineFormInputGroup"
                                            placeholder="Task title here">
                                 </div></span>
-                            {#                            Add description#}
-                            <span>
+                                    {#                            Add description#}
+                                    <span>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">Info</span>
@@ -70,33 +78,36 @@
                                               placeholder="Your description here"></textarea>
                                 </div>
                             </span> <br>
-                            {#                            button Add#}
-                            <span> <a href="#" class="btn btn-sm btn-success btn-green"> Add</a> </span><br>
-
+                                    {#                            button Add#}
+                                    <span> <a href="#" class="btn btn-sm btn-success btn-green"> Add</a> </span><br>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <br>
-                {#            known info about the project#}
-                <div class="card">
-                    <div class="card-img-top"></div>
-                    <div class="card-header">
-                        Project instructor:
-                    </div>
-                    <ul class="list-group list-group-flush">
-                        <a href="#" class="btn btn-sm btn-light" role="button"
-                           aria-pressed="true">{{ project.instructor.name }} {{ project.instructor.surname }}</a>
-                    </ul>
+                    <br>
+                    <div class="shadow bg-white rounded">
+                        {#            known info about the project#}
+                        <div class="card">
+                            <div class="card-img-top"></div>
+                            <div class="card-header">
+                                Project instructor:
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                <a href="#" class="btn btn-sm btn-light btn-white" role="button"
+                                   aria-pressed="true">{{ project.instructor.name }} {{ project.instructor.surname }}</a>
+                            </ul>
 
-                    <div class="card-header">
-                        Project members:
+                            <div class="card-header">
+                                Project members:
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                {% for student in project.students.all %}
+                                    <a href="#" class="btn btn-sm btn-light btn-white" role="button"
+                                       aria-pressed="true">{{ student.name }} {{ student.surname }}</a>
+                                {% endfor %}
+                            </ul>
+                        </div>
                     </div>
-                    <ul class="list-group list-group-flush">
-                        {% for student in project.students.all %}
-                            <a href="#" class="btn btn-sm btn-light" role="button"
-                               aria-pressed="true">{{ student.name }} {{ student.surname }}</a>
-                        {% endfor %}
-                    </ul>
                 </div>
             </div>
         </div>

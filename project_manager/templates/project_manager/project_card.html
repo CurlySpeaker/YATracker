@@ -1,17 +1,19 @@
 <link rel="stylesheet" href="../../static/css/project_manager.css">
 
-<div class="card">
+<div class="card" style="background-color: #e9ecef;">
     <div class="card-img-top"></div>
     <div class="card-body">
         <div class="card-title">{{ project.title }}</div>
     </div>
 </div>
 
-<div class="card-body">
-    <div class="card-text">Project instructor: {{ project.instructor }}</div>
-    <div class="card-text">Project description: {{ project.description }}</div>
-    <div class="card-text">User name: {{ user.name }}</div>
-    <div class="btn-group">
-        <a href="{{ project.get_absolute_url }}" class="btn btn-sm btn-success btn-green">View</a>
+<div class="shadow bg-white rounded">
+    <div class="card-body">
+        <div class="card-text">Project instructor: {{ project.instructor }}</div>
+        <div class="card-text">Project description: {{ project.description }}</div>
+        <div class="card-text">User name: {{ user.name }}</div>
+        <div class="btn-group">
+            <a href="{{ project.get_absolute_url }}" class="btn btn-sm btn-success btn-green">View</a>
+        </div>
     </div>
 </div>
