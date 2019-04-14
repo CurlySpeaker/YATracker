@@ -1,17 +1,70 @@
-<div class="card text-center" style="width: 18rem;">
-    <div class="card-body">
-        <h5 class="card-title">{{ task.title }}</h5>
-        <p class="card-text">{{ task.description }}</p>
-        {% if task.status == "prog" %}
-            <a href="#" class="btn btn-primary">Finish</a>
-        {% elif task.status == "todo" %}
-            <a href="#" class="btn btn-primary">Start</a>
-        {% else %}
-            <div class="btn-group-toggle" data-toggle="buttons">
-                <label class="btn btn-secondary active">
-                    <input type="checkbox" checked autocomplete="off"> Checked
-                </label>
-            </div>
-        {% endif %}
+<link rel="stylesheet" href="../../static/css/project_manager.css">
+<div class="container">
+    {#    <svg class="bd-placeholder-img card-img-top" width="100%" height="125"#}
+    {#         xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false"#}
+    {#         role="img" aria-label="Click to open: Task title">#}
+    {#        <rect width="100%" height="100%" fill="#55595c"/>#}
+    {#        <div class="container" style="background-color: white">#}
+    {#            <text x="20%" y="50%" fill="#eceeef" dy=".3em">#}
+    {#                Task:#}
+    {#                <tspan x="30%" y="70%">{{ task.title }}</tspan>#}
+    {#            </text>#}
+    {#        </div>#}
+    {#    </svg>#}
+
+
+    <div class="card">
+        <div class="card-img-top"></div>
+        <div class="card-body">
+            <div class="card-title">{{ task.title }}</div>
+        </div>
+    </div>
+
+    <div class="card-body"
+{#         style="background-color: antiquewhite; border-color: #333333; border-width: 10px"#}
+    >
+        {#            <div class="card-title">{{ task.title }}</div>#}
+        {#    <div class="card-subtitle mb-2 text-muted">Status: {{ task.get_status_display }}</div>#}
+        <div class="card-text">{{ task.description }}</div>
+
+        <div class="d-flex justify-content-between align-items-center">
+            {% if task.status == "todo" %}
+                <a href="{{ task.get_started_url }}" class="btn btn-sm btn-success btn-green">Start</a>
+                {#                <a href="{{ task.get_started_url }}" class="btn btn-primary"#}
+                {#                   style="background-color: #b38d86; border-color: #b38d86;">Start</a>#}
+            {% elif task.status == "prog" %}
+                <a href="{{ task.get_paused_url }}" class="btn btn-sm btn-success btn-green">Pause</a>
+{#                <a href="{{ task.get_paused_url }}" class="btn btn-sm btn-outline-secondary">Pause</a>#}
+                &nbsp;
+                <a href="{{ task.get_done_url }}" class="btn btn-sm btn-primary btn-violet">Finish</a>
+            {% elif task.status == "paus" %}
+                <a href="{{ task.get_started_url }}" class="btn btn-sm btn-success btn-green">Start</a>
+                &nbsp;
+                <a href="{{ task.get_done_url }}" class="btn btn-sm btn-primary btn-violet">Finish</a>
+            {% else %}
+                <button type="button" class="btn btn-sm btn-success btn-green" disabled>Done</button>
+            {% endif %}
+        </div>
     </div>
 </div>
+
+{#<div class="card text-center" style="width: 18rem;">#}
+{#    <div class="card-body">#}
+{#        <h5 class="card-title">{{ task.title }}</h5>#}
+{#        <h6 class="card-subtitle mb-2 text-muted">{{ task.get_status_display }}</h6>#}
+{#        <p class="card-text">{{ task.description }}</p>#}
+{##}
+{#        {% if task.status == "todo" %}#}
+{#            <a href="{{ task.get_started_url }}" class="btn btn-primary">Start</a>#}
+{#        {% elif task.status == "prog" %}#}
+{#            <a href="{{ task.get_paused_url }}" class="btn btn-primary">Pause</a>#}
+{#            <a href="{{ task.get_done_url }}" class="btn btn-primary">Finish</a>#}
+{#        {% elif task.status == "paus" %}#}
+{#            <a href="{{ task.get_started_url }}" class="btn btn-primary">Start</a>#}
+{#            <a href="{{ task.get_done_url }}" class="btn btn-primary">Finish</a>#}
+{#        {% else %}#}
+{#            <button type="button" class="btn btn-secondary" disabled>Done</button>#}
+{#        {% endif %}#}
+{##}
+{#    </div>#}
+{#</div>#}

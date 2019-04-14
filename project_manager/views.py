@@ -1,14 +1,12 @@
 from django.db.models import Q
-from .models import Project, Task, TimeLog, Student, User
+from django.core.exceptions import ObjectDoesNotExist
+from .models import Project, Task, TimeLog
 from django.shortcuts import render
 from django.urls import reverse
-from django.http import (
-    HttpResponseRedirect,
-    HttpResponse,
-)
+from django.http import HttpResponseRedirect
 from datetime import datetime
-
 from django.contrib.auth import get_user_model
+from user_manager.models import Student
 
 User = get_user_model()
 
@@ -45,13 +43,13 @@ def project_view(request, id):
 
 
 @require_authorized
-def to_progress(request, task_id):
-    task = Task.objects.get(id=task_id)
+def to_progress(request, id):
+    task = Task.objects.get(id=id)
     user = User.objects.get(pk=request.user.id)
-    log = TimeLog.objects.get(user=user, task=task, is_active=True)
-    if log is not None:
+    try:
+        log = TimeLog.objects.get(user=user, task=task, is_active=True)
         log.finish_time = datetime.now()
-    else:
+    except ObjectDoesNotExist:
         log = TimeLog(user=user, task=task)
     log.save()
     project = task.project
@@ -59,45 +57,51 @@ def to_progress(request, task_id):
 
 
 @require_authorized
-def start_task(request, task_id):
-    task = Task.objects.get(id=task_id)
+def start_task(request, id):
+    task = Task.objects.get(id=id)
     user = User.objects.get(pk=request.user.id)
-    log = TimeLog.objects.get(user=user, task=task, is_active=True)
-    if log is None:
-        log = TimeLog(user=user, task=task)
+    log = TimeLog(user=user, task=task)
     log.start_time = datetime.now()
     log.is_active = True
     log.save()
+    task.status = "prog"
+    task.save()
     project = task.project
     return render(request, 'project_manager/project_page.html', {'project': project})
 
 
 @require_authorized
-def pause_task(request, task_id):
-    task = Task.objects.get(id=task_id)
+def pause_task(request, id):
+    task = Task.objects.get(id=id)
     user = User.objects.get(pk=request.user.id)
     log = TimeLog.objects.get(user=user, task=task, is_active=True)
     log.finish_time = datetime.now()
     log.is_active = False
     log.save()
+    task.status = "paus"
+    task.save()
     project = task.project
     return render(request, 'project_manager/project_page.html', {'project': project})
 
 
 @require_authorized
-def to_done(request, task_id):
-    task = Task.objects.get(id=task_id)
+def to_done(request, id):
+    task = Task.objects.get(id=id)
     user = User.objects.get(pk=request.user.id)
-    log = TimeLog.objects.get(user=user, task=task, is_active=True)
-    if log is not None:
+    try:
+        log = TimeLog.objects.get(user=user, task=task, is_active=True)
         log.finish_time = datetime.now()
         log.is_active = False
         log.save()
+    except ObjectDoesNotExist:
+        pass
+    task.status = "done"
+    task.save()
     project = task.project
     return render(request, 'project_manager/project_page.html', {'project': project})
 
 
-# modifications only to test frontend
+# modifications only to test frontend (modify_project)
 @require_authorized
 def modify_project_view(request, id):
     user = User.objects.get(pk=request.user.id)

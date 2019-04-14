@@ -4,35 +4,36 @@
 {% endblock %}
 
 {% block content %}
-    <div class="col-md-4" id="modify">
-        <section id="inner_wrapper" class="login">
+    <div class="container">
+        <div class="row">
             <form method="post">
-                <div class="input-group">
-                    <label for="project_name"> Name </label>
-                    <input type="text" id="project_name" value={{ project.name }}>
+                <div class="form-group">
+                    <label for="project_name"> Project title </label>
+                    <input type="text" class="form-control" id="project_name" value={{ project.title }}>
                 </div>
-                <div class="input-group">
-                    <label for="project_description"> Description </label>
-                    <input type="text" id="project_description" value={{ project.description }}>
+                <div class="form-group">
+                    <label for="project_description"> Project description </label>
+                    <textarea class="form-control" rows="3" id="project_description" value={{ project.description }}></textarea>
                 </div>
-                <div class="input-group">
-{#                    {% for participant in project.students.objects %}#}
+                Project participants
+                <br>
+                <div class="form-check">
                     {% for participant in participants %}
-                        <input type="checkbox" class="form-control" id="id_{{ participant.id }}" name="to_leave"
+                        <input type="checkbox" class="form-check-input" id="id_{{ participant.id }}" name="to_leave"
                                value="id" checked>
-                        <label> {{ participant.name }} {{ participant.surname }}</label>
+                        <label class = "form-check-label">{{ participant.name }} {{ participant.surname }}</label>
                     {% endfor %}
                 </div>
-
-                <div class="input-group">
+                <div class="form-check">
                     {% for participant in non_participants %}
-                        <input type="checkbox" class="form-control" id="id_{{ participant.id }}" name="to_leave"
-                               value="id" >
-                        <label> {{ participant.name }} {{ participant.surname }}</label>
+                        <input type="checkbox" class="form-check-input" id="id_{{ participant.id }}" name="to_leave"
+                               value="id">
+                        <label class="form-check-control"> {{ participant.name }} {{ participant.surname }}</label>
                     {% endfor %}
                 </div>
-
+                <br>
+                <button type="submit" class="btn btn-primary" value="Submit">Edit</button>
             </form>
-        </section>
+        </div>
     </div>
 {% endblock %}
