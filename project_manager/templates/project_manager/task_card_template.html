@@ -1,20 +1,30 @@
-<div class="card text-center" style="width: 18rem;">
+<link rel="stylesheet" href="../../static/css/project_manager.css">
+<div class="container">
+
+    <div class="card">
+        <div class="card-img-top"></div>
+        <div class="card-body">
+            <div class="card-title">{{ task.title }}</div>
+        </div>
+    </div>
+
     <div class="card-body">
-        <h5 class="card-title">{{ task.title }}</h5>
-        <h6 class="card-subtitle mb-2 text-muted">{{ task.get_status_display }}</h6>
-        <p class="card-text">{{ task.description }}</p>
+        <div class="card-text">{{ task.description }}</div>
 
-        {% if task.status == "todo" %}
-            <a href="{{ task.get_started_url }}" class="btn btn-primary">Start</a>
-        {% elif task.status == "prog" %}
-            <a href="{{ task.get_paused_url }}" class="btn btn-primary">Pause</a>
-            <a href="{{ task.get_done_url }}" class="btn btn-primary">Finish</a>
-        {% elif task.status == "paus" %}
-            <a href="{{ task.get_started_url }}" class="btn btn-primary">Start</a>
-            <a href="{{ task.get_done_url }}" class="btn btn-primary">Finish</a>
-        {% else %}
-            <button type="button" class="btn btn-secondary" disabled>Done</button>
-        {% endif %}
-
+        <div class="d-flex justify-content-between align-items-center">
+            {% if task.status == "todo" %}
+                <a href="{{ task.get_started_url }}" class="btn btn-sm btn-success btn-green">Start</a>
+            {% elif task.status == "prog" %}
+                <a href="{{ task.get_paused_url }}" class="btn btn-sm btn-success btn-green">Pause</a>
+                &nbsp;
+                <a href="{{ task.get_done_url }}" class="btn btn-sm btn-light btn-grey">Finish</a>
+            {% elif task.status == "paus" %}
+                <a href="{{ task.get_started_url }}" class="btn btn-sm btn-success btn-green">Start</a>
+                &nbsp;
+                <a href="{{ task.get_done_url }}" class="btn btn-sm btn-light btn-grey">Finish</a>
+            {% else %}
+                <button type="button" class="btn btn-sm btn-grey" disabled>Done</button>
+            {% endif %}
+        </div>
     </div>
 </div>
