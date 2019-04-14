@@ -105,7 +105,6 @@ def to_done(request, id):
 @require_authorized
 def modify_project_view(request, id):
     user = User.objects.get(pk=request.user.id)
-    students = Student.objects.all()
 
     project = Project.objects.get(pk=id)
     participants = project.students.all()

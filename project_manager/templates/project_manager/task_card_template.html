@@ -14,8 +14,6 @@
         <div class="d-flex justify-content-between align-items-center">
             {% if task.status == "todo" %}
                 <a href="{{ task.get_started_url }}" class="btn btn-sm btn-success btn-green">Start</a>
-                {#                <a href="{{ task.get_started_url }}" class="btn btn-primary"#}
-                {#                   style="background-color: #b38d86; border-color: #b38d86;">Start</a>#}
             {% elif task.status == "prog" %}
                 <a href="{{ task.get_paused_url }}" class="btn btn-sm btn-success btn-green">Pause</a>
                 &nbsp;
