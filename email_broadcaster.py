@@ -29,7 +29,8 @@ def send_mails(filename):
         server.login(from_address, password)
         with open(filename) as file:
             reader = csv.reader(file)
-            for name, surname, email, pwd in reader:
+            next(reader)
+            for _, name, surname, email, pwd, _ in reader:
                 server.sendmail(
                     from_address,
                     email,
