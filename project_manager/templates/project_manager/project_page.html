@@ -1,5 +1,6 @@
-<link rel="stylesheet" href="../../../yatracker/static/css/project_manager.css">
 {% extends 'yatracker/base.html' %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/project_manager.css' %}s">
 {% block content %}
     <div class="container">
         <br>
@@ -37,7 +38,7 @@
                 <br>
                 <div class="col-sm">
                     {% for task in project.tasks.all %}
-                        {% if task.status == 'prog' %}
+                        {% if task.status == 'prog' or task.status == 'paus' %}
                             <span> {% include 'project_manager/task_card_template.html' %} </span> <br>
                         {% endif %}
                     {% endfor %}
