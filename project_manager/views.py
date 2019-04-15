@@ -44,8 +44,14 @@ def project_view(request, id):
 
 @require_authorized
 def to_progress(request, id):
-    task = Task.objects.get(id=id)
-    user = User.objects.get(pk=request.user.id)
+    try:
+        task = Task.objects.get(id=id)
+    except ObjectDoesNotExist:
+        raise Exception('No such task')
+    try:
+        user = User.objects.get(pk=request.user.id)
+    except ObjectDoesNotExist:
+        raise Exception('No such user')
     try:
         log = TimeLog.objects.get(user=user, task=task, is_active=True)
         log.finish_time = datetime.now()
@@ -58,10 +64,15 @@ def to_progress(request, id):
 
 @require_authorized
 def start_task(request, id):
-    task = Task.objects.get(id=id)
-    user = User.objects.get(pk=request.user.id)
+    try:
+        task = Task.objects.get(id=id)
+    except ObjectDoesNotExist:
+        raise Exception('No such task')
+    try:
+        user = User.objects.get(pk=request.user.id)
+    except ObjectDoesNotExist:
+        raise Exception('No such user')
     log = TimeLog(user=user, task=task)
-    log.start_time = datetime.now()
     log.is_active = True
     log.save()
     task.status = "prog"
@@ -86,15 +97,22 @@ def pause_task(request, id):
 
 @require_authorized
 def to_done(request, id):
-    task = Task.objects.get(id=id)
-    user = User.objects.get(pk=request.user.id)
+    try:
+        task = Task.objects.get(id=id)
+    except ObjectDoesNotExist:
+        raise Exception('No such task')
+    try:
+        user = User.objects.get(pk=request.user.id)
+    except ObjectDoesNotExist:
+        raise Exception('No such user')
     try:
         log = TimeLog.objects.get(user=user, task=task, is_active=True)
-        log.finish_time = datetime.now()
-        log.is_active = False
-        log.save()
     except ObjectDoesNotExist:
-        pass
+        raise Exception('Task is not active for this user')
+
+    log.finish_time = datetime.now()
+    log.is_active = False
+    log.save()
     task.status = "done"
     task.save()
     project = task.project
