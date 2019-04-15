@@ -3,7 +3,6 @@ from django.http import (
     HttpResponseRedirect,
 )
 
-from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
 from user_manager.forms import PasswordChangeForm
 from django.shortcuts import render
@@ -38,10 +37,7 @@ def change_password(request):
                 user.set_password(new_pass)
                 user.save()
                 update_session_auth_hash(request, user)
-                messages.success(request, 'Your password was successfully updated!')
                 return personal(request)
-            else:
-                messages.error(request, 'Your old password is incorrect.')
     else:
         form = PasswordChangeForm(request.user)
     return render(request, 'user_manager/change_password.html', {'form': form})

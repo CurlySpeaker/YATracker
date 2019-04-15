@@ -3,6 +3,8 @@ from django.contrib import admin
 from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
+from import_export.admin import ImportExportModelAdmin
+from import_export import resources
 
 from .models.user import (
         User,
@@ -57,7 +59,7 @@ class UserChangeForm(forms.ModelForm):
         return self.initial["password"]
 
 
-class UserAdmin(BaseUserAdmin):
+class UserAdmin(ImportExportModelAdmin):
     # The forms to add and change user instances
     form = UserChangeForm
     add_form = UserCreationForm
@@ -85,10 +87,39 @@ class UserAdmin(BaseUserAdmin):
     filter_horizontal = ()
 
 
+class UserResource(resources.ModelResource):
+    class Meta:
+        model = User
+        fields = ('id', 'name', 'surname', 'email', 'password', 'user_type')
+
+    def before_import_row(self, row, **kwargs):
+        user = User(email=row['email'])
+        user.set_password(row['password'])
+        row['password'] = user.password
+
+
+class StudentResource(UserResource):
+    class Meta:
+        model = Student
+
+
+class InstructorResource(UserResource):
+    class Meta:
+        model = Instructor
+
+
+class StudentAdmin(UserAdmin):
+    resource_class = StudentResource
+
+
+class InstructorAdmin(UserAdmin):
+    resource_class = InstructorResource
+
+
 # Now register the new UserAdmin...
 admin.site.register(User, UserAdmin)
-admin.site.register(Student, UserAdmin)
-admin.site.register(Instructor, UserAdmin)
+admin.site.register(Student, StudentAdmin)
+admin.site.register(Instructor, InstructorAdmin)
 admin.site.register(Admin, UserAdmin)
 # ... and, since we're not using Django's built-in permissions,
 # unregister the Group model from admin.
