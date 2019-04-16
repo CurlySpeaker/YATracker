@@ -5,9 +5,12 @@
     <div class="container">
         <br>
         <div class="shadow p-3 mb-5 bg-white rounded">
-            <h1>{{ project.title }}
-                <a href="{% url 'modify_project' project.id %}" class="btn btn-success btn-green">Edit</a>
-            </h1>
+            {% if project.instructor.id == user.id %}
+                <h1>{{ project.title }}
+                    <a href="{% url 'modify_project' project.id %}" class="btn btn-success btn-green">Edit</a>
+                </h1>
+            {% endif %}
+
             <p class="card-text">{{ project.description }}</p>
         </div>
     </div>

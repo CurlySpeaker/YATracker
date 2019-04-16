@@ -50,10 +50,10 @@ def project_view(request, id):
                 task.save()
             else:
                 form.add_error(None, "The title is empty")
-            return render(request, 'project_manager/project_page.html', {'project': project, 'form': form})
+            return render(request, 'project_manager/project_page.html', {'project': project, 'user': user, 'form': form})
     else:
         form = AddTaskForm()
-    return render(request, 'project_manager/project_page.html', {'project': project, 'form': form})
+    return render(request, 'project_manager/project_page.html', {'project': project, 'user': user, 'form': form})
 
 
 @require_authorized
@@ -73,7 +73,7 @@ def to_progress(request, id):
         log = TimeLog(user=user, task=task)
     log.save()
     project = task.project
-    return render(request, 'project_manager/project_page.html', {'project': project})
+    return render(request, 'project_manager/project_page.html', {'project': project, 'user': user})
 
 
 @require_authorized
@@ -92,7 +92,7 @@ def start_task(request, id):
     task.status = "prog"
     task.save()
     project = task.project
-    return render(request, 'project_manager/project_page.html', {'project': project})
+    return render(request, 'project_manager/project_page.html', {'project': project, 'user': user})
 
 
 @require_authorized
@@ -106,7 +106,7 @@ def pause_task(request, id):
     task.status = "paus"
     task.save()
     project = task.project
-    return render(request, 'project_manager/project_page.html', {'project': project})
+    return render(request, 'project_manager/project_page.html', {'project': project, 'user': user})
 
 
 @require_authorized
@@ -130,7 +130,7 @@ def to_done(request, id):
     task.status = "done"
     task.save()
     project = task.project
-    return render(request, 'project_manager/project_page.html', {'project': project})
+    return render(request, 'project_manager/project_page.html', {'project': project, 'user': user})
 
 
 # modifications only to test frontend (modify_project)
@@ -154,7 +154,7 @@ def modify_project_view(request, id):
                 project.save()
             else:
                 form.add_error(None, "The title is empty")
-            return render(request, 'project_manager/project_page.html', {'project': project})
+            return render(request, 'project_manager/project_page.html', {'project': project, 'user': user})
     else:
         form = UpdateProjectForm()
     if project.students.filter(pk=user.id).exists() or project.instructor.id == user.id:
