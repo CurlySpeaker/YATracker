@@ -20,7 +20,7 @@ YATracker Team
 """
 from_address = "yatracker.team@gmail.com"
 password = input("Type your password and press enter: ")
-host = "http://127.0.0.1:8000"
+host = "http://138.68.108.57:8000"
 
 
 def send_mails(filename):
