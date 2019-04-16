@@ -90,7 +90,7 @@ class UserAdmin(ImportExportModelAdmin):
 class UserResource(resources.ModelResource):
     class Meta:
         model = User
-        fields = ('id', 'name', 'surname', 'email', 'password', 'user_type')
+        fields = ('id', 'surname', 'name', 'email', 'password', 'user_type')
 
     def before_import_row(self, row, **kwargs):
         user = User(email=row['email'])

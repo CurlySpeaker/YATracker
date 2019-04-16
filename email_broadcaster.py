@@ -30,7 +30,7 @@ def send_mails(filename):
         with open(filename) as file:
             reader = csv.reader(file)
             next(reader)
-            for _, name, surname, email, pwd, _ in reader:
+            for _, surname, name, email, pwd, _ in reader:
                 server.sendmail(
                     from_address,
                     email,
