@@ -121,12 +121,12 @@ def to_done(request, id):
         raise Exception('No such user')
     try:
         log = TimeLog.objects.get(user=user, task=task, is_active=True)
+        log.finish_time = datetime.now()
+        log.is_active = False
+        log.save()
     except ObjectDoesNotExist:
-        raise Exception('Task is not active for this user')
+        pass
 
-    log.finish_time = datetime.now()
-    log.is_active = False
-    log.save()
     task.status = "done"
     task.save()
     project = task.project
