@@ -55,32 +55,32 @@
 
                 <div class="col-sm">
                     <div class="card">
-                        <div class="card-img-top"></div>
                         <div class="shadow bg-white rounded">
                             <div class="card-body">
-                                <div class="card-title">
-                                    {#                            Add a new task title#}
-                                    <span> <label class="sr-only" for="inlineFormInputGroup">Title</label>
-                                <div class="input-group mb-2">
-                                    <div class="input-group-prepend">
-                                        <div class="input-group-text">Title</div>
-                                    </div>
-                                    <input type="text" class="form-control" id="inlineFormInputGroup"
-                                           placeholder="Task title here">
-                                </div></span>
-                                    {#                            Add description#}
+                                <form method="post">
+                                    <div class="card-title">
+                                        {#                            Add a new task title#}
+                                        <span> <label class="sr-only" for="inlineFormInputGroup">Title</label>
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">Title</div>
+                                        </div>
+                                        <input type="text" class="form-control" id="inlineFormInputGroup"
+                                               placeholder="Task title here">
+                                    </div></span>
+                                        {#                            Add description#}
                                     <span>
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">Info</span>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Info</span>
+                                        </div>
+                                        <textarea class="form-control" aria-label="With textarea"
+                                                  placeholder="Your description here"></textarea>
+                                    </div></span> <br>
+                                        {#                            button Add#}
+                                        <span> <a href="#" class="btn btn-sm btn-success btn-green"> Add</a> </span><br>
                                     </div>
-                                    <textarea class="form-control" aria-label="With textarea"
-                                              placeholder="Your description here"></textarea>
-                                </div>
-                            </span> <br>
-                                    {#                            button Add#}
-                                    <span> <a href="#" class="btn btn-sm btn-success btn-green"> Add</a> </span><br>
-                                </div>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -91,7 +91,7 @@
                             <div class="container" style="background-color: #e9ecef">
                                 Project instructor:
                             </div>
-                            
+
                             <ul class="list-group list-group-flush">
                                 <a href="#" class="btn btn-sm btn-light btn-white" role="button"
                                    aria-pressed="true">{{ project.instructor.name }} {{ project.instructor.surname }}</a>
