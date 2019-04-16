@@ -7,7 +7,7 @@ from django.http import HttpResponseRedirect
 from datetime import datetime
 from django.contrib.auth import get_user_model
 from user_manager.models import Student
-from project_manager.forms import UpdateProjectForm
+from project_manager.forms import UpdateProjectForm, AddTaskForm
 
 User = get_user_model()
 
@@ -37,10 +37,23 @@ def index(request):
 def project_view(request, id):
     user = User.objects.get(pk=request.user.id)
     project = Project.objects.get(pk=id)
-    if project.students.filter(pk=user.id).exists() or project.instructor.id == user.id:
-        return render(request, 'project_manager/project_page.html', {'project': project})
-    else:
+    if not (project.students.filter(pk=user.id).exists() or project.instructor.id == user.id):
         return HttpResponseRedirect(reverse('dashboard'))
+
+    if request.method == 'POST':
+        form = AddTaskForm(request.POST)
+        if form.is_valid():
+            title = form.cleaned_data['title']
+            info = form.cleaned_data['info']
+            if title:
+                task = Task(title=title, description=info, status='todo', project=project)
+                task.save()
+            else:
+                form.add_error(None, "The title is empty")
+            return render(request, 'project_manager/project_page.html', {'project': project, 'form': form})
+    else:
+        form = AddTaskForm()
+    return render(request, 'project_manager/project_page.html', {'project': project, 'form': form})
 
 
 @require_authorized
@@ -112,11 +125,9 @@ def modify_project_view(request, id):
 
     non_participants = Student.objects.exclude(projects=project)
     if request.method == 'POST':
-        print(request.POST)
         form = UpdateProjectForm(request.POST)
 
         if form.is_valid():
-            print(form.cleaned_data)
             title = form.cleaned_data['title']
             description = form.cleaned_data['description']
             if title:
@@ -128,7 +139,6 @@ def modify_project_view(request, id):
             return render(request, 'project_manager/project_page.html', {'project': project})
     else:
         form = UpdateProjectForm()
-    print(project.title)
     if project.students.filter(pk=user.id).exists() or project.instructor.id == user.id:
         return render(request, 'project_manager/modify_project.html', {
             'project': project,

@@ -1,6 +1,6 @@
 {% extends 'yatracker/base.html' %}
 {% load static %}
-<link rel="stylesheet" href="{% static 'css/project_manager.css' %}s">
+<link rel="stylesheet" href="{% static 'css/project_manager.css' %}">
 {% block content %}
     <div class="container">
         <br>
@@ -58,6 +58,7 @@
                         <div class="shadow bg-white rounded">
                             <div class="card-body">
                                 <form method="post">
+                                    {% csrf_token %}
                                     <div class="card-title">
                                         {#                            Add a new task title#}
                                         <span> <label class="sr-only" for="inlineFormInputGroup">Title</label>
@@ -65,7 +66,7 @@
                                         <div class="input-group-prepend">
                                             <div class="input-group-text">Title</div>
                                         </div>
-                                        <input type="text" class="form-control" id="inlineFormInputGroup"
+                                        <input type="text" class="form-control" name="title" id="inlineFormInputGroup"
                                                placeholder="Task title here">
                                     </div></span>
                                         {#                            Add description#}
@@ -74,11 +75,13 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">Info</span>
                                         </div>
-                                        <textarea class="form-control" aria-label="With textarea"
+                                        <textarea class="form-control" name="info" aria-label="With textarea"
                                                   placeholder="Your description here"></textarea>
-                                    </div></span> <br>
+                                    </div>
+                                    </span>
+                                    <br>
                                         {#                            button Add#}
-                                        <span> <a href="#" class="btn btn-sm btn-success btn-green"> Add</a> </span><br>
+                                        <span><button type="submit" class="btn btn-sm btn-success btn-green">Add</button></span><br>
                                     </div>
                                 </form>
                             </div>
