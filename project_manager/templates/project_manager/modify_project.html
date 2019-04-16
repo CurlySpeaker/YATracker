@@ -7,32 +7,51 @@
     <div class="container">
         <div class="row">
             <form method="post">
+                {% csrf_token %}
                 <div class="form-group">
                     <label for="project_name"> Project title </label>
-                    <input type="text" class="form-control" id="project_name" value={{ project.title }}>
+                    <textarea class="form-control" rows="1" name="title" id="project_name">{{ project.title }}</textarea>
+{#                    <input type="text" class="form-control" name="title" id="project_name" value={{ project.title }}>#}
                 </div>
                 <div class="form-group">
                     <label for="project_description"> Project description </label>
-                    <textarea class="form-control" rows="3" id="project_description" value={{ project.description }}></textarea>
+                    <textarea class="form-control" rows="3" name="description" id="project_description">{{ project.description }}</textarea>
                 </div>
+                Project instructor
+                <br>
+                <ul class="list-group">
+                    <li class="list-group-item">{{ project.instructor.name }} {{ project.instructor.surname }}</li>
+                </ul>
+                <br>
                 Project participants
                 <br>
-                <div class="form-check">
+                <ul class="list-group">
                     {% for participant in participants %}
-                        <input type="checkbox" class="form-check-input" id="id_{{ participant.id }}" name="to_leave"
-                               value="id" checked>
-                        <label class = "form-check-label">{{ participant.name }} {{ participant.surname }}</label>
+                        <li class="list-group-item">{{ participant.name }} {{ participant.surname }}</li>
                     {% endfor %}
+                </ul>
+                <div class="alert alert-success" role="alert">
+                  <h4 class="alert-heading">Future Coming!</h4>
+                  <p>Currently, we removed the ability to add/remove students in a project. We need to check this functionality properly. Anyway, we don't consider you might need it right now.</p>
+                  <hr>
+                  <p class="mb-0">If you have reasons in needing this functionality, send us a feedback in Telegram.</p>
                 </div>
-                <div class="form-check">
-                    {% for participant in non_participants %}
-                        <input type="checkbox" class="form-check-input" id="id_{{ participant.id }}" name="to_leave"
-                               value="id">
-                        <label class="form-check-control"> {{ participant.name }} {{ participant.surname }}</label>
-                    {% endfor %}
-                </div>
+{#                <div class="form-check">#}
+{#                    {% for participant in participants %}#}
+{#                        <input type="checkbox" class="form-check-input" id="id_{{ participant.id }}" name="to_leave"#}
+{#                               value="id" checked>#}
+{#                        <label class = "form-check-label">{{ participant.name }} {{ participant.surname }}</label>#}
+{#                    {% endfor %}#}
+{#                </div>#}
+{#                <div class="form-check">#}
+{#                    {% for participant in non_participants %}#}
+{#                        <input type="checkbox" class="form-check-input" id="id_{{ participant.id }}" name="to_leave"#}
+{#                               value="id">#}
+{#                        <label class="form-check-control"> {{ participant.name }} {{ participant.surname }}</label>#}
+{#                    {% endfor %}#}
+{#                </div>#}
                 <br>
-                <button type="submit" class="btn btn-primary" value="Submit">Edit</button>
+                <button type="submit" class="btn btn-primary">Edit</button>
             </form>
         </div>
     </div>

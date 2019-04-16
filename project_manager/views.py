@@ -7,6 +7,7 @@ from django.http import HttpResponseRedirect
 from datetime import datetime
 from django.contrib.auth import get_user_model
 from user_manager.models import Student
+from project_manager.forms import UpdateProjectForm
 
 User = get_user_model()
 
@@ -110,9 +111,28 @@ def modify_project_view(request, id):
     participants = project.students.all()
 
     non_participants = Student.objects.exclude(projects=project)
+    if request.method == 'POST':
+        print(request.POST)
+        form = UpdateProjectForm(request.POST)
+
+        if form.is_valid():
+            print(form.cleaned_data)
+            title = form.cleaned_data['title']
+            description = form.cleaned_data['description']
+            if title:
+                project.title = title
+                project.description = description
+                project.save()
+            else:
+                form.add_error(None, "The title is empty")
+            return render(request, 'project_manager/project_page.html', {'project': project})
+    else:
+        form = UpdateProjectForm()
+    print(project.title)
     if project.students.filter(pk=user.id).exists() or project.instructor.id == user.id:
         return render(request, 'project_manager/modify_project.html', {
             'project': project,
             'participants': participants,
-            'non_participants': non_participants
+            'non_participants': non_participants,
+            'form': form
         })
