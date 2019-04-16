@@ -39,5 +39,5 @@ def change_password(request):
                 update_session_auth_hash(request, user)
                 return personal(request)
     else:
-        form = PasswordChangeForm(request.user)
+        form = PasswordChangeForm()
     return render(request, 'user_manager/change_password.html', {'form': form})
