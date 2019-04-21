@@ -10,12 +10,12 @@
                 {% csrf_token %}
                 <div class="form-group">
                     <label for="project_name"> Project title </label>
-                    <textarea class="form-control" rows="1" name="title" id="project_name">{{ project.title }}</textarea>
+                    <textarea class="form-control" rows="1" name="title" id="project_name" maxlength="128">{{ project.title }}</textarea>
 {#                    <input type="text" class="form-control" name="title" id="project_name" value={{ project.title }}>#}
                 </div>
                 <div class="form-group">
                     <label for="project_description"> Project description </label>
-                    <textarea class="form-control" rows="3" name="description" id="project_description">{{ project.description }}</textarea>
+                    <textarea class="form-control" rows="3" name="description" id="project_description" maxlength="1024">{{ project.description }}</textarea>
                 </div>
                 Project instructor
                 <br>

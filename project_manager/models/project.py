@@ -13,7 +13,7 @@ User = get_user_model()
 
 class Project(models.Model):
     title = models.CharField(max_length=128)
-    description = models.TextField()
+    description = models.TextField(max_length=1024)
     students = models.ManyToManyField(Student, related_name='projects')
     instructor = models.ForeignKey(
         Instructor,
@@ -31,7 +31,7 @@ class Project(models.Model):
 
 class Task(models.Model):
     title = models.CharField(max_length=128)
-    description = models.TextField()
+    description = models.TextField(max_length=256)
     status = models.CharField(max_length=4, choices=STATUS)
     members = models.ManyToManyField(Student, related_name='tasks')
     project = models.ForeignKey(
