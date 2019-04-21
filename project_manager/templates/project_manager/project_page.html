@@ -5,11 +5,13 @@
     <div class="container">
         <br>
         <div class="shadow p-3 mb-5 bg-white rounded">
-            {% if project.instructor.id == user.id %}
+
                 <h1>{{ project.title }}
-                    <a href="{% url 'modify_project' project.id %}" class="btn btn-success btn-green">Edit</a>
+                    {% if project.instructor.id == user.id %}
+                        <a href="{% url 'modify_project' project.id %}" class="btn btn-success btn-green">Edit</a>
+                    {% endif %}
                 </h1>
-            {% endif %}
+
 
             <p class="card-text">{{ project.description }}</p>
         </div>
