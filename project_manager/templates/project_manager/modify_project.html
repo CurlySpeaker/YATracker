@@ -23,33 +23,40 @@
                     <li class="list-group-item">{{ project.instructor.name }} {{ project.instructor.surname }}</li>
                 </ul>
                 <br>
+                <div class="alert alert-success" role="alert">
+                  <h4 class="alert-heading">New Coming!</h4>
+                  <p>We have added the functionality to add/remove students in a project. Fill free to drop your students ;)</p>
+                </div>
                 Project participants
                 <br>
                 <ul class="list-group">
                     {% for participant in participants %}
-                        <li class="list-group-item">{{ participant.name }} {{ participant.surname }}</li>
+                        <div class="input-group mb-0">
+                          <div class="input-group-prepend">
+                            <div class="input-group-text">
+                              <input id="team" type="checkbox" name="team" value="{{ participant.id }}" checked>
+                            </div>
+                          </div>
+                            <label class = "form-control list-group-item">{{ participant.name }} {{ participant.surname }}</label>
+                        </div>
                     {% endfor %}
                 </ul>
-                <div class="alert alert-success" role="alert">
-                  <h4 class="alert-heading">Future Coming!</h4>
-                  <p>Currently, we removed the ability to add/remove students in a project. We need to check this functionality properly. Anyway, we don't consider you might need it right now.</p>
-                  <hr>
-                  <p class="mb-0">If you have reasons in needing this functionality, send us a feedback in Telegram.</p>
-                </div>
-{#                <div class="form-check">#}
-{#                    {% for participant in participants %}#}
-{#                        <input type="checkbox" class="form-check-input" id="id_{{ participant.id }}" name="to_leave"#}
-{#                               value="id" checked>#}
-{#                        <label class = "form-check-label">{{ participant.name }} {{ participant.surname }}</label>#}
-{#                    {% endfor %}#}
-{#                </div>#}
-{#                <div class="form-check">#}
-{#                    {% for participant in non_participants %}#}
-{#                        <input type="checkbox" class="form-check-input" id="id_{{ participant.id }}" name="to_leave"#}
-{#                               value="id">#}
-{#                        <label class="form-check-control"> {{ participant.name }} {{ participant.surname }}</label>#}
-{#                    {% endfor %}#}
-{#                </div>#}
+
+                <br>
+                Other Students
+                <br>
+                <ul class="list-group">
+                    {% for participant in non_participants %}
+                        <div class="input-group mb-0">
+                          <div class="input-group-prepend">
+                            <div class="input-group-text">
+                              <input type="checkbox" name="to_add" value="{{ participant.id }}">
+                            </div>
+                          </div>
+                            <label class = "form-control list-group-item">{{ participant.name }} {{ participant.surname }}</label>
+                        </div>
+                    {% endfor %}
+                </ul>
                 <br>
                 <button type="submit" class="btn btn-primary">Edit</button>
             </form>

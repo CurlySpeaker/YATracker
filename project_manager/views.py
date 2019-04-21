@@ -145,7 +145,20 @@ def modify_project_view(request, id):
     if request.method == 'POST':
         form = UpdateProjectForm(request.POST)
 
+        team_ids = list(map(int, request.POST.getlist('team')))
+        new_students = list(map(int, request.POST.getlist('to_add')))
+
         if form.is_valid():
+            removals = []
+            for student in project.students.all():
+                if student.id not in team_ids:
+                    removals.append(student)
+            for removal in removals:
+                project.students.remove(removal)
+
+            for student_id in new_students:
+                project.students.add(Student.objects.get(id=student_id))
+
             title = form.cleaned_data['title']
             description = form.cleaned_data['description']
             if title:
