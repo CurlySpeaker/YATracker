@@ -6,11 +6,11 @@
 
             <div class="card-img-top"></div>
             <div class="card-body" style="background-color: #e9ecef;">
-                <div class="card-title">{{ task.title }}</div>
+                <div class="card-title">{{ task.title|truncatechars:128 }}</div>
             </div>
 
             <div class="card-body">
-                <div class="card-text">{{ task.description|truncatechars:128 }}</div>
+                <div class="card-text">{{ task.description|truncatechars:256 }}</div>
                 <div class="card-text">{{ task.get_status_display }}</div>
                 <br>
                 <div class="d-flex justify-content-between align-items-center">
