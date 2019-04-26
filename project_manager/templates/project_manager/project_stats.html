@@ -1,0 +1,32 @@
+{% extends 'yatracker/base.html' %}
+{% block title %}
+    Project Statistics
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="shadow p-3 mb-5 bg-white rounded">
+
+            <h1>{{ project.title }}</h1>
+            <p class="card-text">{{ project.description }}</p>
+        </div>
+    </div>
+    <div class="container">
+        <div class="shadow p-3 mb-5 bg-white rounded">
+            {% if no_data %}
+                <span>Currently, you don't have enough data to show statistics :(</span>
+            {% else %}
+                <div class="container">
+                    <div class="row">
+                        {% if graph %}
+                            <div>
+                                {{ graph|safe }}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock %}

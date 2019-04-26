@@ -8,6 +8,8 @@ from datetime import datetime
 from django.contrib.auth import get_user_model
 from user_manager.models import Student
 from project_manager.forms import UpdateProjectForm, AddTaskForm
+import plotly.offline as opy
+import plotly.graph_objs as go
 
 User = get_user_model()
 
@@ -177,3 +179,27 @@ def modify_project_view(request, id):
             'non_participants': non_participants,
             'form': form
         })
+
+
+@require_authorized
+def statistics_view(request, id):
+    project = Project.objects.get(pk=id)
+    tasks = Task.objects.filter(project=project)
+    if tasks is None:
+        context = {'no_data': True, 'graph': None, 'project': project}
+        return render(request, 'project_manager/project_stats.html', context)
+    logs = TimeLog.objects.filter(task__id__in=tasks.all())
+
+    # some sample plotting example
+    x = [-2, 0, 4, 6, 7]
+    y = [q ** 2 - q + 3 for q in x]
+    trace1 = go.Scatter(x=x, y=y, marker={'color': 'red', 'symbol': 104, 'size': 10},
+                        mode="lines", name='1st Trace')
+
+    layout = go.Layout(title="Meine Daten", xaxis={'title': 'x1'}, yaxis={'title': 'x2'})
+    figure = go.Figure(data=[trace1], layout=layout)
+    div = opy.plot(figure, auto_open=False, output_type='div')
+
+    context = {'graph': div, 'no_data': False, 'project': project}
+
+    return render(request, 'project_manager/project_stats.html', context)
