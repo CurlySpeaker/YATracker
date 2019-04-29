@@ -63,5 +63,5 @@ class TimeLog(models.Model):
         on_delete=models.CASCADE
     )
     is_active = models.BooleanField(default=False)
-    start_time = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    start_time = models.DateTimeField(null=True, blank=True)
     finish_time = models.DateTimeField(null=True, blank=True)

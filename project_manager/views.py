@@ -4,7 +4,7 @@ from .models import Project, Task, TimeLog
 from django.shortcuts import render
 from django.urls import reverse
 from django.http import HttpResponseRedirect
-from datetime import datetime
+from datetime import datetime, timedelta
 from django.contrib.auth import get_user_model
 from user_manager.models import Student
 from project_manager.forms import UpdateProjectForm, AddTaskForm
@@ -89,6 +89,7 @@ def start_task(request, id):
     except ObjectDoesNotExist:
         raise Exception('No such user')
     log = TimeLog(user=user, task=task)
+    log.start_time = datetime.now()
     log.is_active = True
     log.save()
     task.status = "prog"
@@ -186,20 +187,132 @@ def statistics_view(request, id):
     project = Project.objects.get(pk=id)
     tasks = Task.objects.filter(project=project)
     if tasks is None:
-        context = {'no_data': True, 'graph': None, 'project': project}
+        context = {'no_data': True, 'graph': None, 'graph2': None, 'graph3': None, 'project': project}
         return render(request, 'project_manager/project_stats.html', context)
     logs = TimeLog.objects.filter(task__id__in=tasks.all())
 
-    # some sample plotting example
-    x = [-2, 0, 4, 6, 7]
-    y = [q ** 2 - q + 3 for q in x]
-    trace1 = go.Scatter(x=x, y=y, marker={'color': 'red', 'symbol': 104, 'size': 10},
-                        mode="lines", name='1st Trace')
+    in_progress = 0
+    todo = 0
+    done = 0
+    for task in tasks:
+        if task.status == 'todo':
+            todo += 1
+        elif task.status == 'done':
+            done += 1
+    in_progress = len(tasks) - todo - done
 
-    layout = go.Layout(title="Meine Daten", xaxis={'title': 'x1'}, yaxis={'title': 'x2'})
+    # --------------------------------------------first  graph----------------------------------------------------------
+
+    x = ['TO DO', 'In progress', 'DONE']
+    y = [todo, in_progress, done]
+    trace1 = go.Bar(
+        x=x, y=y,
+        # text=['27% market share', '24% market share', '19% market share'],
+        marker=dict(
+            color='rgb(158,202,225)',
+            line=dict(
+                color='rgb(8,48,107)',
+                width=1.5,
+            )
+        ),
+        opacity=0.6
+    )
+
+    layout = go.Layout(title="Status stats", xaxis={'title': 'Status'}, yaxis={'title': 'Amount'})
     figure = go.Figure(data=[trace1], layout=layout)
+
     div = opy.plot(figure, auto_open=False, output_type='div')
 
-    context = {'graph': div, 'no_data': False, 'project': project}
+    # --------------------------------------------second graph----------------------------------------------------------
+
+    x = []
+    y = []
+
+    for log in logs:
+        days = (log.finish_time.date()-log.start_time.date()).days - 1
+        if log.start_time.date() not in x:
+            x.append(log.start_time.date())
+            y.append(0)
+        for i in range(days):
+            tmp_date = log.start_time.date() + timedelta(days=i)
+            if tmp_date not in x:
+                x.append(tmp_date)
+                y.append(0)
+        if log.finish_time.date() not in x:
+            x.append(log.finish_time.date())
+            y.append(0)
+
+    for log in logs:
+        days = (log.finish_time.date() - log.start_time.date()).days - 1
+        # print(days)
+        if days == 0:
+            difference = (log.start_time.date() + timedelta(days=1) - log.start_time).total_seconds()
+            ind = x.index(log.start_time.date())
+            y[ind] += difference
+
+            difference = (log.finish_time - log.finish_time.date()).total_seconds()
+            ind = x.index(log.finish_time.date())
+            y[ind] += difference
+        elif days > 0:
+            difference = (log.start_time.date() + timedelta(days=1) - log.start_time).total_seconds()
+            ind = x.index(log.start_time.date())
+            y[ind] += difference
+
+            for i in range(days):
+                difference = (log.start_time.date() + timedelta(days=1 + i) - log.start_time + timedelta(days=i)).total_seconds()
+                ind = x.index(log.start_time.date() + timedelta(days=i))
+                y[ind] += difference
+
+            difference = (log.finish_time - log.finish_time.date()).total_seconds()
+            ind = x.index(log.finish_time.date())
+            y[ind] += difference
+        else:
+            difference = (log.finish_time - log.start_time).total_seconds()
+            ind = x.index(log.start_time.date())
+            y[ind] += difference
+
+    for i in range(len(x) - 1):
+        for j in range(i):
+            if x[j] > x[j + 1]:
+                temp = x[i]
+                x[i] = x[i + 1]
+                x[i + 1] = temp
+                temp = y[i]
+                y[i] = y[i + 1]
+                y[i + 1] = temp
+
+    trace2 = go.Bar(x=x, y=y)
+
+    layout2 = go.Layout(title="Dates stats", xaxis={'title': 'dates'}, yaxis={'title': 'time (seconds)'})
+    figure2 = go.Figure(data=[trace2], layout=layout2)
+    div2 = opy.plot(figure2, auto_open=False, output_type='div')
+
+    for log in logs:
+        print(log.start_time,  " ", log.finish_time)
+
+    # ---------------------------------------------third graph----------------------------------------------------------
+
+    x_t = []
+    y = []
+
+    for task in tasks:
+        x_t.append(task)
+        y.append(0)
+
+    for log in logs:
+        ind = x_t.index(log.task)
+        difference = (log.finish_time - log.start_time).total_seconds()
+        y[ind] += difference
+    x = []
+    for i in x_t:
+        x.append(i.title[:10])
+
+    trace3 = go.Bar(x=x, y=y)
+
+    layout3 = go.Layout(title="Tasks stats", xaxis={'title': 'tasks'}, yaxis={'title': 'time (seconds)'})
+    figure3 = go.Figure(data=[trace3], layout=layout3)
+    div3 = opy.plot(figure3, auto_open=False, output_type='div')
+
+    context = {'graph': div, 'graph2': div2, 'graph3': div3, 'no_data': False, 'project': project}
 
     return render(request, 'project_manager/project_stats.html', context)
