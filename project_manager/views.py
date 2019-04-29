@@ -73,6 +73,7 @@ def to_progress(request, id):
         log.finish_time = datetime.now()
     except ObjectDoesNotExist:
         log = TimeLog(user=user, task=task)
+        log.start_time = datetime.now()
     log.save()
     project = task.project
     return render(request, 'project_manager/project_page.html', {'project': project, 'user': user})
