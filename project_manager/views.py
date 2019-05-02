@@ -258,15 +258,18 @@ def statistics_view(request, id):
         days = (finish.date() - start.date()).days - 1
         # print(days)
         if days == 0:
-            difference = ceil((start.date() + timedelta(days=1) - start).total_seconds() / 60)
+            new_one = datetime(start.year, start.month, start.day + 1, 0, 0, 0).replace(tzinfo=utc)
+            difference = ceil((new_one - start).total_seconds() / 60)
             ind = x.index(start.date())
             y[ind] += difference
 
-            difference = ceil((finish - finish.date()).total_seconds() / 60)
+            new_one = datetime(finish.year, finish.month, finish.day, 0, 0, 0).replace(tzinfo=utc)
+            difference = ceil((finish - new_one).total_seconds() / 60)
             ind = x.index(finish.date())
             y[ind] += difference
         elif days > 0:
-            difference = ceil((start.date() + timedelta(days=1) - start).total_seconds() / 60)
+            new_one = datetime(start.year, start.month, start.day + 1, 0, 0, 0).replace(tzinfo=utc)
+            difference = ceil((new_one - start).total_seconds() / 60)
             ind = x.index(start.date())
             y[ind] += difference
 
@@ -276,7 +279,8 @@ def statistics_view(request, id):
                 ind = x.index(start.date() + timedelta(days=i))
                 y[ind] += difference
 
-            difference = ceil((finish - finish.date()).total_seconds() / 60)
+            new_one = datetime(finish.year, finish.month, finish.day, 0, 0, 0).replace(tzinfo=utc)
+            difference = ceil((finish - new_one).total_seconds() / 60)
             ind = x.index(finish.date())
             y[ind] += difference
         else:

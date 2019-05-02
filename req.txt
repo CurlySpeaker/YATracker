@@ -18,7 +18,6 @@ nbformat==4.4.0
 odfpy==1.4.0
 openpyxl==2.6.2
 Pillow==5.4.1
-pkg-resources==0.0.0
 plotly==3.8.1
 pyrsistent==0.15.1
 pytz==2017.3
