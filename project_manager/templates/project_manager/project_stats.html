@@ -1,4 +1,6 @@
 {% extends 'yatracker/base.html' %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/project_manager.css' %}">
 {% block title %}
     Project Statistics
 {% endblock %}
@@ -7,7 +9,9 @@
     <div class="container">
         <div class="shadow p-3 mb-5 bg-white rounded">
 
-            <h1>{{ project.title }}</h1>
+            <h1>{{ project.title }}
+                <a href="{{ project.get_absolute_url }}" class="btn btn-success btn-green">Back</a>
+            </h1>
             <p class="card-text">{{ project.description }}</p>
         </div>
     </div>
@@ -16,29 +20,37 @@
             {% if no_data %}
                 <span>Currently, you don't have enough data to show statistics :(</span>
             {% else %}
-                <div class="container">
-                    <div class="row">
-                        {% if graph %}
-                            <div>
-                                {{ graph|safe }}
-                            </div>
-                        {% endif %}
-                    </div>
-                    <div class="row">
-                        {% if graph2 %}
-                            <div>
-                                {{ graph2|safe }}
-                            </div>
-                        {% endif %}
-                    </div>
-                    <div class="row">
-                        {% if graph3 %}
-                            <div>
-                                {{ graph3|safe }}
-                            </div>
-                        {% endif %}
-                    </div>
+                <nav>
+                  <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <a class="nav-item nav-link active" id="balance-tab" data-toggle="tab" href="#balance" role="tab" aria-controls="balance" aria-selected="true">Tasks Completion</a>
+                    <a class="nav-item nav-link" id="timing-tab" data-toggle="tab" href="#timing" role="tab" aria-controls="timing" aria-selected="false">Timing Per Dates</a>
+                    <a class="nav-item nav-link" id="tasking-tab" data-toggle="tab" href="#tasking" role="tab" aria-controls="tasking" aria-selected="false">Time per Tasks</a>
+                  </div>
+                </nav>
+                <div class="tab-content" id="myTabContent">
+                  <div class="tab-pane show active" id="balance" role="tabpanel" aria-labelledby="balance-tab">
+                      {% if graph %}
+                        <div>
+                            {{ graph|safe }}
+                        </div>
+                      {% endif %}
+                  </div>
+                  <div class="tab-pane" id="timing" role="tabpanel" aria-labelledby="timing-tab">
+                      {% if graph2 %}
+                        <div>
+                            {{ graph2|safe }}
+                        </div>
+                      {% endif %}
+                  </div>
+                  <div class="tab-pane" id="tasking" role="tabpanel" aria-labelledby="tasking-tab">
+                      {% if graph3 %}
+                        <div>
+                            {{ graph3|safe }}
+                        </div>
+                      {% endif %}
+                  </div>
                 </div>
+
             {% endif %}
         </div>
     </div>

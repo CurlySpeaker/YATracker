@@ -10,7 +10,10 @@ from user_manager.models import Student
 from project_manager.forms import UpdateProjectForm, AddTaskForm
 import plotly.offline as opy
 import plotly.graph_objs as go
+from math import ceil
+import pytz
 
+utc = pytz.UTC
 User = get_user_model()
 
 
@@ -52,7 +55,8 @@ def project_view(request, id):
                 task.save()
             else:
                 form.add_error(None, "The title is empty")
-            return render(request, 'project_manager/project_page.html', {'project': project, 'user': user, 'form': form})
+            return render(request, 'project_manager/project_page.html',
+                          {'project': project, 'user': user, 'form': form})
     else:
         form = AddTaskForm()
     return render(request, 'project_manager/project_page.html', {'project': project, 'user': user, 'form': form})
@@ -192,7 +196,6 @@ def statistics_view(request, id):
         return render(request, 'project_manager/project_stats.html', context)
     logs = TimeLog.objects.filter(task__id__in=tasks.all())
 
-    in_progress = 0
     todo = 0
     done = 0
     for task in tasks:
@@ -204,22 +207,18 @@ def statistics_view(request, id):
 
     # --------------------------------------------first  graph----------------------------------------------------------
 
-    x = ['TO DO', 'In progress', 'DONE']
+    x = ['TODO', 'In Progress', 'DONE']
     y = [todo, in_progress, done]
     trace1 = go.Bar(
         x=x, y=y,
-        # text=['27% market share', '24% market share', '19% market share'],
         marker=dict(
-            color='rgb(158,202,225)',
-            line=dict(
-                color='rgb(8,48,107)',
-                width=1.5,
-            )
-        ),
-        opacity=0.6
-    )
+            color=['rgba(57, 106, 177, 1)', 'rgba(218, 124, 48, 1)', 'rgba(62, 150, 81, 1)']
+        ))
 
-    layout = go.Layout(title="Status stats", xaxis={'title': 'Status'}, yaxis={'title': 'Amount'})
+    layout = go.Layout(title="Task Distribution per Status", xaxis={'title': 'Status', 'fixedrange': True},
+                       yaxis={'title': 'Amount', 'rangemode': 'tozero', 'tickformat': ',d', 'fixedrange': True},
+                       height=550,
+                       margin=go.layout.Margin(l=50, r=50, b=100, t=100, pad=4))
     figure = go.Figure(data=[trace1], layout=layout)
 
     div = opy.plot(figure, auto_open=False, output_type='div')
@@ -230,46 +229,59 @@ def statistics_view(request, id):
     y = []
 
     for log in logs:
-        days = (log.finish_time.date()-log.start_time.date()).days - 1
-        if log.start_time.date() not in x:
-            x.append(log.start_time.date())
+        start = log.start_time.date()
+        try:
+            finish = log.finish_time.date()
+        except AttributeError:
+            finish = datetime.utcnow().date()
+        days = (finish - start).days - 1
+        if start not in x:
+            x.append(start)
             y.append(0)
         for i in range(days):
-            tmp_date = log.start_time.date() + timedelta(days=i)
+            tmp_date = start + timedelta(days=i)
             if tmp_date not in x:
                 x.append(tmp_date)
                 y.append(0)
-        if log.finish_time.date() not in x:
-            x.append(log.finish_time.date())
+        if finish not in x:
+            x.append(finish)
             y.append(0)
 
     for log in logs:
-        days = (log.finish_time.date() - log.start_time.date()).days - 1
+        start = log.start_time.replace(tzinfo=utc)
+        try:
+            finish = log.finish_time
+            if finish is None:
+                raise AttributeError
+        except AttributeError:
+            finish = datetime.now().replace(tzinfo=utc)
+        days = (finish.date() - start.date()).days - 1
         # print(days)
         if days == 0:
-            difference = (log.start_time.date() + timedelta(days=1) - log.start_time).total_seconds()
-            ind = x.index(log.start_time.date())
+            difference = ceil((start.date() + timedelta(days=1) - start).total_seconds() / 60)
+            ind = x.index(start.date())
             y[ind] += difference
 
-            difference = (log.finish_time - log.finish_time.date()).total_seconds()
-            ind = x.index(log.finish_time.date())
+            difference = ceil((finish - finish.date()).total_seconds() / 60)
+            ind = x.index(finish.date())
             y[ind] += difference
         elif days > 0:
-            difference = (log.start_time.date() + timedelta(days=1) - log.start_time).total_seconds()
-            ind = x.index(log.start_time.date())
+            difference = ceil((start.date() + timedelta(days=1) - start).total_seconds() / 60)
+            ind = x.index(start.date())
             y[ind] += difference
 
             for i in range(days):
-                difference = (log.start_time.date() + timedelta(days=1 + i) - log.start_time + timedelta(days=i)).total_seconds()
-                ind = x.index(log.start_time.date() + timedelta(days=i))
+                difference = ceil((start.date() + timedelta(days=1 + i) - start + timedelta(
+                    days=i)).total_seconds() / 60)
+                ind = x.index(start.date() + timedelta(days=i))
                 y[ind] += difference
 
-            difference = (log.finish_time - log.finish_time.date()).total_seconds()
-            ind = x.index(log.finish_time.date())
+            difference = ceil((finish - finish.date()).total_seconds() / 60)
+            ind = x.index(finish.date())
             y[ind] += difference
         else:
-            difference = (log.finish_time - log.start_time).total_seconds()
-            ind = x.index(log.start_time.date())
+            difference = ceil((finish - start).total_seconds() / 60)
+            ind = x.index(start.date())
             y[ind] += difference
 
     for i in range(len(x) - 1):
@@ -282,14 +294,33 @@ def statistics_view(request, id):
                 y[i] = y[i + 1]
                 y[i + 1] = temp
 
-    trace2 = go.Bar(x=x, y=y)
+    start = (datetime.now() - timedelta(days=16)).date()
+    end = (datetime.now() - timedelta(days=0)).date()
+    for day in range((end - start).days + 1):
+        date = start + timedelta(days=day)
+        if date not in x:
+            x.append(date)
+            y.append(0)
 
-    layout2 = go.Layout(title="Dates stats", xaxis={'title': 'dates'}, yaxis={'title': 'time (seconds)'})
+    trace2 = go.Bar(x=x, y=y, marker=dict(color='rgba(57, 106, 177, 1)'))
+
+    layout2 = go.Layout(title="Timing per Dates", xaxis={'title': 'dates',
+                                                    'range': [(datetime.now() - timedelta(days=16)).date(),
+                                                              (datetime.now() - timedelta(days=0)).date()],
+                                                    'tickformat': '%Y-%m-%d',
+                                                    'tickmode': 'auto',
+                                                    'nticks': 30,
+                                                    'tick0': 10,
+                                                    'dtick': 20
+                                                    },
+                        yaxis={'title': 'time (minutes)', 'tickformat': ',d', 'fixedrange': True,
+                               'rangemode': 'tozero'}, width=1100,
+                        height=550, margin=go.layout.Margin(l=50, r=50, b=100, t=100, pad=4))
     figure2 = go.Figure(data=[trace2], layout=layout2)
     div2 = opy.plot(figure2, auto_open=False, output_type='div')
 
     for log in logs:
-        print(log.start_time,  " ", log.finish_time)
+        print(log.start_time, " ", log.finish_time)
 
     # ---------------------------------------------third graph----------------------------------------------------------
 
@@ -297,20 +328,32 @@ def statistics_view(request, id):
     y = []
 
     for task in tasks:
-        x_t.append(task)
-        y.append(0)
+        if task.status != 'todo':
+            x_t.append(task)
+            y.append(0)
 
     for log in logs:
         ind = x_t.index(log.task)
-        difference = (log.finish_time - log.start_time).total_seconds()
+        start = log.start_time.replace(tzinfo=utc)
+        try:
+            finish = log.finish_time
+            if finish is None:
+                raise AttributeError
+        except AttributeError:
+            finish = datetime.now().replace(tzinfo=utc)
+        difference = ceil((finish - start).total_seconds() / 60)
         y[ind] += difference
     x = []
     for i in x_t:
         x.append(i.title[:10])
 
-    trace3 = go.Bar(x=x, y=y)
+    trace3 = go.Bar(x=x, y=y, marker=dict(color='rgba(218, 124, 48, 1)'))
 
-    layout3 = go.Layout(title="Tasks stats", xaxis={'title': 'tasks'}, yaxis={'title': 'time (seconds)'})
+    layout3 = go.Layout(title="Timing per Tasks", xaxis={'title': 'tasks'},
+                        yaxis={'title': 'time (minutes)', 'tickformat': ',d', 'fixedrange': True,
+                               'rangemode': 'tozero'},
+                        width=1100,
+                        height=550, margin=go.layout.Margin(l=50, r=50, b=100, t=100, pad=4))
     figure3 = go.Figure(data=[trace3], layout=layout3)
     div3 = opy.plot(figure3, auto_open=False, output_type='div')
 
