@@ -40,8 +40,8 @@
 
         &nbsp;
         <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-success btn-green" type="submit">Search</button>&nbsp;
+{#            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">#}
+{#            <button class="btn btn-success btn-green" type="submit">Search</button>&nbsp;#}
             {% if request.user.is_authenticated %}
                 <a class="btn btn-light btn-grey" href="{% url 'personal' %}">Profile</a>&nbsp;
                 <a class="btn btn-light btn-grey" href="{% url 'personal' %}"
@@ -79,7 +79,7 @@
 {% endblock %}
 <footer class="page-footer sticky-bottom font-small blue">
     <div class="footer-copyright text-center py-3">© 2019 Copyright:
-        <a href="http://natribu.org/" class="btn btn-light"> Our investor</a>
+        <a href="http://university.innopolis.ru/" class="btn btn-light"> Our investor</a>
     </div>
 </footer>
 
