@@ -28,6 +28,8 @@ ALLOWED_HOSTS = [
     '138.68.108.57',
     '127.0.0.1',
     'localhost',
+    'yacker.ru',
+    'www.yacker.ru',
 ]
 
 # Application definition
