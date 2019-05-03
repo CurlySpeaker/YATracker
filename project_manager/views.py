@@ -256,7 +256,6 @@ def statistics_view(request, id):
         except AttributeError:
             finish = datetime.now().replace(tzinfo=utc)
         days = (finish.date() - start.date()).days - 1
-        # print(days)
         if days == 0:
             new_one = datetime(start.year, start.month, start.day + 1, 0, 0, 0).replace(tzinfo=utc)
             difference = ceil((new_one - start).total_seconds() / 60)
@@ -322,9 +321,6 @@ def statistics_view(request, id):
                         height=550, margin=go.layout.Margin(l=50, r=50, b=100, t=100, pad=4))
     figure2 = go.Figure(data=[trace2], layout=layout2)
     div2 = opy.plot(figure2, auto_open=False, output_type='div')
-
-    for log in logs:
-        print(log.start_time, " ", log.finish_time)
 
     # ---------------------------------------------third graph----------------------------------------------------------
 
